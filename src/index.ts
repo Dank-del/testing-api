@@ -1,9 +1,13 @@
 import express from "express"
 import createRouter, { router } from "express-file-routing"
 import { connect } from "mongoose"
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express()
 
+app.use(cookieParser());
 app.use(express.json())
 app.use("/", router()) // as router middleware or
 

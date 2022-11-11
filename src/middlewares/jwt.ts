@@ -3,16 +3,16 @@ import { Request, Response, NextFunction } from "express";
 import { IStudent, Student } from "../models/students";
 import { ITeacher, Teacher } from "../models/teacher";
 
-interface CustomRequest extends Request {
+export interface AuthorizedRequest extends Request {
     student?: IStudent | null;
     teacher?: ITeacher | null;
 }
 
-export const auth = async (req: CustomRequest, res: Response, next: NextFunction) => {
+export const auth = async (req: AuthorizedRequest, res: Response, next: NextFunction) => {
     // jwt middleware
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+    var token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
-        const token = req.cookies.token;
+        token = req.cookies.token;
     }
     if (!token) {
         return res.status(401).json({ message: "Access denied" });
@@ -25,6 +25,6 @@ export const auth = async (req: CustomRequest, res: Response, next: NextFunction
         req.teacher = teacher;
         next();
     } catch (error) {
-        return res.status(400).json({ message: "Invalid token" });
+        return res.status(400).json({ message: error });
     }
 }
