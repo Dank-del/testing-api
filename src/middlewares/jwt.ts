@@ -10,7 +10,8 @@ export interface AuthorizedRequest extends Request {
 
 export const auth = async (req: AuthorizedRequest, res: Response, next: NextFunction) => {
     // jwt middleware
-    var token = req.header("Authorization")?.replace("Bearer ", "");
+    var token = req.body.token || req.query.token || req.headers["x-access-token"];
+    console.log(token);
     if (!token) {
         token = req.cookies.token;
     }

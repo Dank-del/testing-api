@@ -1,9 +1,16 @@
 import { model, Schema } from "mongoose";
+import { ITeacher } from "./teacher";
+
+export interface IOption {
+    data: string;
+    isCorrect: boolean;
+}
 
 export interface IQuestion {
+    id: string;
     question: string;
-    options: string[];
-    answer: string;
+    options: IOption[];
+    // answer: IOption['id'];
 }
 
 // exam interface
@@ -11,11 +18,12 @@ export interface IExam {
     name: string;
     subject: string;
     date: Date;
-    time: string;
+    time: Date;
     duration: number;
     totalMarks: number;
     passingMarks: number;
     questions: IQuestion[];
+    teacher: ITeacher;
 }
 
 
@@ -34,7 +42,7 @@ const examSchema = new Schema({
         required: true,
     },
     time: {
-        type: String,
+        type: Date,
         required: true,
     },
     duration: {
@@ -51,22 +59,38 @@ const examSchema = new Schema({
     },
     questions: [
         {
-            question: {
+            id: {
                 type: String,
                 required: true,
+            },
+            question: {
+                type: String,
+                required: false,
             },
             options: [
                 {
-                    type: String,
-                    required: true,
+                    isCorrect: {
+                        type: Boolean,
+                        required: false,
+                        default: false
+                    },
+                    data: {
+                        type: String,
+                        required: true,
+                    },
                 },
             ],
-            answer: {
-                type: String,
-                required: true,
-            },
+            // answer: {
+            //     type: String,
+            //     required: true,
+            // },
         },
     ],
+    teacher: {
+        type: Schema.Types.ObjectId,
+        ref: "Teacher",
+        required: true,
+    }
 });
 
 // exam model
