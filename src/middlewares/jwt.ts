@@ -9,12 +9,14 @@ export interface AuthorizedRequest extends Request {
 }
 
 export const auth = async (req: AuthorizedRequest, res: Response, next: NextFunction) => {
+    // console.log(req.headers);
     // jwt middleware
-    var token = req.body.token || req.query.token || req.headers["x-access-token"];
+    var token = req.header("Authorization")?.replace("Bearer ", "");
     console.log(token);
     if (!token) {
         token = req.cookies.token;
     }
+    if (!token) token = req.body.token;
     if (!token) {
         return res.status(401).json({ message: "Access denied" });
     }

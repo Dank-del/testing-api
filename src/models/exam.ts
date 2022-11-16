@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { number } from "zod";
 import { ITeacher } from "./teacher";
 
 export interface IOption {
@@ -17,8 +18,8 @@ export interface IQuestion {
 export interface IExam {
     name: string;
     subject: string;
-    date: Date;
-    time: Date;
+    date?: Date;
+    //timeMinutes: number;
     duration: number;
     totalMarks: number;
     passingMarks: number;
@@ -39,11 +40,11 @@ const examSchema = new Schema({
     },
     date: {
         type: Date,
-        required: true,
+        required: false,
     },
-    time: {
-        type: Date,
-        required: true,
+    timeMinutes: {
+        type: Number,
+        required: false,
     },
     duration: {
         type: Number,

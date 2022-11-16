@@ -1,12 +1,14 @@
 import { Response } from "express";
 import { z } from "zod";
 import { validateRequest } from "zod-express-middleware";
-import { AuthorizedRequest } from "../../../middlewares/jwt";
+import { auth, AuthorizedRequest } from "../../../middlewares/jwt";
 import { Exam } from "../../../models/exam";
 import { IQuestion } from "../../../models/exam";
 import { v4 as uuiv4 } from "uuid";
+import { Teacher } from "../../../models/teacher";
 
 export const post = [
+    auth,
     validateRequest({
         body: z.object({
             examId: z.string().min(5),
@@ -28,6 +30,12 @@ export const post = [
         const exam = await Exam.findById(examId);
         if (!exam) {
             return res.status(400).json({ message: "Exam not found" });
+        }
+
+        const teacher = await Teacher.findOne({ email: req.teacher.email });
+
+        if (exam.teacher.toString() !== teacher?._id.toString()) {
+            return res.status(400).json({ message: "Invalid exam" });
         }
 
         const q: IQuestion = {
