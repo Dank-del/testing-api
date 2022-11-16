@@ -19,7 +19,7 @@ export const post = [
                     isCorrect: z.boolean().default(false),
                 })
             ),
-        }).strict()
+        })
     }),
     async (req: AuthorizedRequest, res: Response) => {
         if (!req.teacher) {
