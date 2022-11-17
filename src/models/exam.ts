@@ -4,7 +4,7 @@ import { ITeacher } from "./teacher";
 
 export interface IOption {
     data: string;
-    isCorrect: boolean;
+    isCorrect?: boolean;
 }
 
 export interface IQuestion {

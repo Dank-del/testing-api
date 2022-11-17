@@ -12,7 +12,7 @@ export const auth = async (req: AuthorizedRequest, res: Response, next: NextFunc
     // console.log(req.headers);
     // jwt middleware
     var token = req.header("Authorization")?.replace("Bearer ", "");
-    console.log(token);
+    // console.log(token);
     if (!token) {
         token = req.cookies.token;
     }
