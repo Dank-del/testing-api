@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { auth, AuthorizedRequest } from "../../middlewares/jwt";
 import { Exam } from "../../models/exam";
 import _ from 'lodash';
