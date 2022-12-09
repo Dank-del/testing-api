@@ -13,6 +13,7 @@ export const post = [
         body: z.object({
             examId: z.string().min(5),
             question: z.string().min(3),
+            marks: z.number().min(1),
             options: z.array(
                 z.object({
                     data: z.string().min(5),
@@ -26,7 +27,7 @@ export const post = [
             return res.status(400).json({ message: "Teacher not found" });
         }
 
-        const { examId, question, options } = req.body;
+        const { examId, question, options, marks } = req.body;
         const exam = await Exam.findById(examId);
         if (!exam) {
             return res.status(400).json({ message: "Exam not found" });
@@ -38,10 +39,21 @@ export const post = [
             return res.status(400).json({ message: "Invalid exam" });
         }
 
+        // calculate total marks from the existing questions
+        let totalMarks = 0;
+        exam.questions.forEach((q: IQuestion) => {
+            totalMarks += q.marks;
+        });
+
+        if (totalMarks + marks > exam.totalMarks) {
+            return res.status(400).json({ message: "Total marks exceeded" });
+        }
+
         const q: IQuestion = {
             id: uuiv4().toString(),
             question: question,
             options: options,
+            marks: marks,
         };
 
         await exam.questions.push(q);

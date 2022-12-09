@@ -3,6 +3,7 @@ import { string } from 'zod';
 
 // student interface
 export interface IStudent {
+    _id: string;
     name: string;
     email: string;
     identityHash: string;

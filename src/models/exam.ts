@@ -1,16 +1,17 @@
-import { model, Schema } from "mongoose";
-import { number } from "zod";
+import { model, Schema, Types } from "mongoose";
 import { ITeacher } from "./teacher";
 
 export interface IOption {
     data: string;
-    isCorrect?: boolean;
+    optionId: string;
+    isCorrect: boolean;
 }
 
 export interface IQuestion {
     id: string;
     question: string;
     options: IOption[];
+    marks: number;
     // answer: IOption['id'];
 }
 
@@ -68,6 +69,10 @@ const examSchema = new Schema({
                 type: String,
                 required: false,
             },
+            marks: {
+                type: Number,
+                required: true,
+            },
             options: [
                 {
                     isCorrect: {
@@ -79,6 +84,11 @@ const examSchema = new Schema({
                         type: String,
                         required: true,
                     },
+                    optionId: {
+                        type: String,
+                        required: false,
+                        default: new Types.ObjectId()
+                    }
                 },
             ],
             // answer: {
