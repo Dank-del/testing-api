@@ -2,7 +2,7 @@ import { Response } from "express";
 import { z } from "zod";
 import { validateRequest } from "zod-express-middleware";
 import { auth, AuthorizedRequest } from "../../../middlewares/jwt";
-import { Exam } from "../../../models/exam";
+import { Exam, IOption } from "../../../models/exam";
 import { IQuestion } from "../../../models/exam";
 import { v4 as uuiv4 } from "uuid";
 import { Teacher } from "../../../models/teacher";
@@ -49,6 +49,11 @@ export const post = [
             return res.status(400).json({ message: "Total marks exceeded" });
         }
 
+        // iter over the options and add a unique id to each
+        options.forEach((option: IOption) => {
+            option.optionId = uuiv4().toString();
+        });
+
         const q: IQuestion = {
             id: uuiv4().toString(),
             question: question,
@@ -56,7 +61,8 @@ export const post = [
             marks: marks,
         };
 
-        await exam.questions.push(q);
+        exam.questions.push(q);
+        // console.log(exam);
         await exam.save();
         return res.status(200).json({ message: "Question added successfully", exam: exam.toJSON() });
     }
