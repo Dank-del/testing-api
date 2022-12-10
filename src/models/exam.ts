@@ -1,6 +1,5 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 import { ITeacher } from "./teacher";
-
 export interface IOption {
     data: string;
     optionId: string;
@@ -86,8 +85,7 @@ const examSchema = new Schema({
                     },
                     optionId: {
                         type: String,
-                        required: false,
-                        default: new Types.ObjectId()
+                        required: true,
                     }
                 },
             ],

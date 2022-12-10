@@ -2,6 +2,7 @@ import { model, Schema } from "mongoose";
 
 // teacher interface
 export interface ITeacher {
+    _id: string;
     name: string;
     email: string;
     password: string;
